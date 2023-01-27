@@ -1,0 +1,22 @@
+version: '3.1'
+
+# db : 6101
+
+services:
+  db:
+    container_name: db
+    ports:
+      - "6101:6101"
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=admin
+    image: postgres:14.3-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "port=6101"
+    volumes:
+      - pg:/var/lib/postgresql/data/
+
+volumes:
+  pg:
