@@ -26,7 +26,33 @@ class AppUserConttolelr extends ResourceController {
     }
   }
 
-  @Operation.post()
+  // @Operation.post()
+  // Future<Response> updateProfile(
+  //   @Bind.header(HttpHeaders.authorizationHeader) String header,
+  //   @Bind.body() User user,
+  // ) async {
+  //   try {
+  //     final id = AppUtils.getIdFromHeader(header);
+  //     final fUser = await managedContext.fetchObjectWithID<User>(id);
+  //     final qUpdateUser = Query<User>(managedContext)
+  //       ..where((element) => element.id)
+  //       ..values.userName = user.userName ?? fUser!.userName
+  //       ..values.email = user.email ?? fUser!.email;
+  //     await qUpdateUser.updateOne();
+  //     final findUser = await managedContext.fetchObjectWithID<User>(id);
+  //     findUser!.removePropertiesFromBackingMap(['refreshToken', 'accessToken']);
+
+  //     return AppResponse.ok(
+  //       message: 'Успешное обновление данных',
+  //       body: findUser.backing.contents,
+  //     );
+  //   } catch (e) {
+  //     return AppResponse.serverError(e, message: 'Ошибка обновления данных');
+  //   }
+  // }
+
+
+   @Operation.post()
   Future<Response> updateProfile(
     @Bind.header(HttpHeaders.authorizationHeader) String header,
     @Bind.body() User user,
@@ -37,7 +63,7 @@ class AppUserConttolelr extends ResourceController {
       final qUpdateUser = Query<User>(managedContext)
         ..where((element) => element.id).equalTo(id)
         ..values.userName = user.userName ?? fUser!.userName
-        ..values.userName = user.email ?? fUser!.email;
+        ..values.email = user.email ?? fUser!.email;
       await qUpdateUser.updateOne();
       final findUser = await managedContext.fetchObjectWithID<User>(id);
       findUser!.removePropertiesFromBackingMap(['refreshToken', 'accessToken']);
@@ -51,11 +77,12 @@ class AppUserConttolelr extends ResourceController {
     }
   }
 
-  @Operation.put()
+
+   @Operation.put()
   Future<Response> updatePassword(
     @Bind.header(HttpHeaders.authorizationHeader) String header,
-    @Bind.body() String newPassword,
-    @Bind.body() String oldPassword,
+    @Bind.query("newPassword") String newPassword,
+    @Bind.query("oldPassword") String oldPassword,
   ) async {
     try {
       final id = AppUtils.getIdFromHeader(header);
@@ -69,6 +96,7 @@ class AppUserConttolelr extends ResourceController {
         );
 
       final fUser = await qFindUser.fetchOne();
+
 
       final oldHashPassword =
           generatePasswordHash(oldPassword, fUser!.salt ?? "");

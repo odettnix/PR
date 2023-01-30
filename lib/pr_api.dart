@@ -1,8 +1,14 @@
 import 'dart:io';
 import 'package:conduit/conduit.dart';
+import 'package:pr_api/controllers/app_accounting_controller.dart';
+import 'package:pr_api/controllers/app_history_controller.dart';
 import 'package:pr_api/controllers/app_post_controller.dart';
 import 'package:pr_api/controllers/app_token_contoller.dart';
 import 'package:pr_api/controllers/app_user_contoller.dart';
+
+import 'model/accounting.dart';
+import 'model/user.dart';
+import 'model/history.dart';
 
 import 'controllers/app_auth_controller.dart';
 
@@ -26,16 +32,19 @@ class AppService extends ApplicationChannel {
     ..route('user')
         .link(AppTokenContoller.new)!
         .link(() => AppUserConttolelr(managedContext))
-    ..route('post/[:id]')
+    ..route('accounting/[:id]')
         .link(AppTokenContoller.new)!
-        .link(() => AppPostController(managedContext));
+        .link(() => AppAccountingController(managedContext))
+    ..route('history')
+        .link(AppTokenContoller.new)!
+        .link(() => AppHistoryController(managedContext));
 
   PersistentStore _initDatabase() {
     final username = Platform.environment['DB_USERNAME'] ?? 'postgres';
-    final password = Platform.environment['DB_PASSWORD'] ?? 'lecnoe2002';
+    final password = Platform.environment['DB_PASSWORD'] ?? '12345678';
     final host = Platform.environment['DB_HOST'] ?? '127.0.0.1';
     final port = int.parse(Platform.environment['DB_PORT'] ?? '5432');
-    final databaseName = Platform.environment['DB_NAME'] ?? 'postgres';
+    final databaseName = Platform.environment['DB_NAME'] ?? 'newDB';
     return PostgreSQLPersistentStore(
         username, password, host, port, databaseName);
   }

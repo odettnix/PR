@@ -2,7 +2,7 @@ import 'package:conduit/conduit.dart';
 
 import 'author.dart';
 
-class Post extends ManagedObject<Post> implements _Post {}
+class Post extends ManagedObject<_Post> implements _Post {}
 
 class _Post {
   @primaryKey

@@ -81,7 +81,7 @@ class AppAuthController extends ResourceController {
         message: 'Пользователь успешно зарегистрировался',
       ));
     } catch (e) {
-      return AppResponse.serverError(ModelResponse(message: e));
+      return AppResponse.serverError( e);
     }
   }
 

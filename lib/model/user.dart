@@ -1,4 +1,7 @@
 import 'package:conduit/conduit.dart';
+import 'package:pr_api/model/accounting.dart';
+
+import 'history.dart';
 
 class User extends ManagedObject<_User> implements _User {}
 
@@ -20,4 +23,7 @@ class _User {
   String? salt;
   @Column(omitByDefault: true)
   String? hashPassword;
+
+  ManagedSet<Accounting>? accountingList;
+  ManagedSet<History>? historyList;
 }
