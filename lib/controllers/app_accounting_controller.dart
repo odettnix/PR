@@ -55,7 +55,8 @@ class AppAccountingController extends ResourceController {
   @Operation.get()
   Future<Response> getAccountings(
       @Bind.header(HttpHeaders.authorizationHeader) String header,
-      {@Bind.query("deleted") int? deleted}) async {
+      {@Bind.query("deleted") int? deleted, 
+      @Bind.query("search") String? search}) async {
     try {
       final id = AppUtils.getIdFromHeader(header);
 
@@ -70,10 +71,14 @@ class AppAccountingController extends ResourceController {
         qAccountings.where((accounting) => accounting.deleted).equalTo(true);
       }
 
+      if(search != null || search != ''){
+        qAccountings.where((accounting) => accounting.nameOperation).contains(search!);
+      }
+
       final List<Accounting> accountingList = await qAccountings.fetch();
 
       if (accountingList.isEmpty) {
-        return AppResponse.ok(message: "Заметки не найдены");
+        return AppResponse.ok(message: "Учеты не найдены");
       }
 
       return Response.ok(accountingList);
